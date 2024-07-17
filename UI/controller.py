@@ -9,10 +9,24 @@ class Controller:
         self._model = model
 
     def handle_graph(self, e):
-        pass
+        self._model.build_graph()
+        self._view.txt_result.controls.append(ft.Text(
+            f"Numero di vertici: {self._model.get_num_of_nodes()} Numero di archi: {self._model.get_num_of_edges()}"))
+        self._view.txt_result.controls.append(ft.Text(
+            f"Informazioni sui pesi degli archi - valore minino: {self._model.get_min_weight()} e valore massimo: {self._model.get_max_weight()}"))
+
+        self._view.update_page()
 
     def handle_countedges(self, e):
-        pass
+        threshold = float(self._view.txt_name.value)
+        if threshold < self._model.get_min_weight() or threshold > self._model.get_max_weight():
+            self._view.create_alert("Valore di soglia non valida!")
+            return
+        count_bigger, count_smaller = self._model.count_edges(threshold)
+
+        self._view.txt_result2.controls.append(ft.Text(f"Numero archi con peso maggiore della soglia: {count_bigger}"))
+        self._view.txt_result2.controls.append(ft.Text(f"Numero archi con peso minore della soglia: {count_smaller}"))
+        self._view.update_page()
 
     def handle_search(self, e):
         pass
